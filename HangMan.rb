@@ -7,7 +7,7 @@ class HangMan
     @incorrect_letters = []
     @correct_letters = []
     @secret_word = choose_random_word
-    @screen = blank_screen
+    @screen = Screen.new()
     @exit_message = exit_message
   end
 
@@ -45,7 +45,7 @@ class HangMan
       @correct_letters << new_letter
     else
       @incorrect_letters << new_letter
-      update_screen(@incorrect_letters.count-1)
+      @screen.redraw(@incorrect_letters.count-1)
     end
   end
 
@@ -75,18 +75,9 @@ class HangMan
     format_string
   end
 
-  def update_screen(error_number)
-    error_row = error_hashes[error_number][:row]
-    error_col = error_hashes[error_number][:col]
-    error_str = error_hashes[error_number][:str]
-    @screen[error_row][error_col ]= error_str
-  end
-
   def redraw_hangman
     puts "\e[H\e[2J"
-    @screen.each do |*,line|
-      puts line
-    end
+    @screen.display
     puts incorrect_letters_formatted
     puts correct_letters_formatted
   end
@@ -96,92 +87,98 @@ class HangMan
       puts "You won!"
       @exit_message = "You won!"
       true
-    elsif @incorrect_letters.length == error_hashes.length
+    elsif @incorrect_letters.length == @screen.error_bank.length
       @exit_message = "You lost! :("
       true
     end
 
   end
 
-  def error_hashes
-    [
-      {
-        id: :head,
-        row: :c,
-        col: 11,
-        str: "O".red
-      },
-      {
-        id: :arm1,
-        row: :d,
-        col: 12,
-        str: "-".cyan
-      },
-      {
-        id:  :body1,
-        row: :d,
-        col: 11,
-        str: "|".green
-      },
-      {
-        id: :arm2,
-        row: :d,
-        col: 10,
-        str: "-".magenta
-      },
-      {
-        id: :body2,
-        row: :e,
-        col: 11,
-        str: "|".blue
-      },
-      {
-        id: :leg1,
-        row: :f,
-        col: 12,
-        str: "\\".white
-      },
-      {
-        id: :leg2,
-        row: :f,
-        col: 10,
-        str: "/".yellow
-      },
+
+  class Screen
+    attr_accessor :picture
+
+    def initialize
+      @picture = blank_screen
+    end
+
+    def redraw(error_number)
+        error_row = error_bank[error_number][:row]
+        error_col = error_bank[error_number][:col]
+        error_str = error_bank[error_number][:str]
+        @picture[error_row][error_col ] = error_str
+    end
+
+    def display
+      @picture.each do |*,line|
+        puts line
+      end
+    end
+
+    def blank_screen
+        {
+        a: "  |             ",
+        b: "  |--------|    ",
+        c: "  |             ",
+        d: "  |             ",
+        e: "  |             ",
+        f: "  |             ",
+        g: "  |     _______ ",
+        h: "__|____________ ",
+        j: "                ",
+        k: "                "
+      }
+    end
+
+    def error_bank
+      [
+        {
+          id: :head,
+          row: :c,
+          col: 11,
+          str: "O".red
+        },
+        {
+          id: :arm1,
+          row: :d,
+          col: 12,
+          str: "-".cyan
+        },
+        {
+          id:  :body1,
+          row: :d,
+          col: 11,
+          str: "|".green
+        },
+        {
+          id: :arm2,
+          row: :d,
+          col: 10,
+          str: "-".magenta
+        },
+        {
+          id: :body2,
+          row: :e,
+          col: 11,
+          str: "|".blue
+        },
+        {
+          id: :leg1,
+          row: :f,
+          col: 12,
+          str: "\\".white
+        },
+        {
+          id: :leg2,
+          row: :f,
+          col: 10,
+          str: "/".yellow
+        },
 
 
-    ]
+      ]
 
-  end
-
-
-  def blank_screen
-      {
-      a: "  |             ",
-      b: "  |--------|    ",
-      c: "  |             ",
-      d: "  |             ",
-      e: "  |             ",
-      f: "  |             ",
-      g: "  |     _______ ",
-      h: "__|____________ ",
-      j: "                ",
-      k: "                "
-    }
-  end
-
-  def end_screen
-      {
-      a: "  |             ",
-      b: "  |--------|    ",
-      c: "  |        O    ",
-      d: "  |       _|_   ",
-      e: "  |        |    ",
-      f: "  |       / \\   ",
-      g: "  |     _______ ",
-      h: "__|____________ ",
-      j: "                ",
-      k: "                "
-    }
+    end
   end
 end
 
