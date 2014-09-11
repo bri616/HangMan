@@ -22,14 +22,19 @@ class HangMan
     check_word_for_letter(letter) if in_alphabet? letter
   end
 
-  def in_alphabet?(letter)
-    if !("a".."z").to_a.include? letter
+  def update_scrn_msg(letter)
+    if !in_alphabet? letter
       @screen_message = "Not allowed!".magenta
-      false
+    elsif @letters_tried.include? letter
+      @screen_message = "Already tried it!".magenta
     else
       @screen_message = ""
-      true
     end
+  end
+
+
+  def in_alphabet?(letter)
+    ("a".."z").to_a.include? letter
   end
 
   def check_word_for_letter(new_letter)
@@ -192,6 +197,7 @@ def run
     hangman_game.redraw_hangman
     print "Guess a letter: "
     letter = gets.chomp.downcase
+    hangman_game.update_scrn_msg(letter)
     hangman_game.check_guess(letter)
   end
   hangman_game.redraw_hangman
