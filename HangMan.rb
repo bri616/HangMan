@@ -109,8 +109,8 @@ class HangMan
         @picture[error_row][error_col ] = randomly_colorize(error_str)
     end
 
-    def randomly_colorize(error_str)
-      error_str.colorize(String.colors.shuffle.first)
+    def randomly_colorize(input_str)
+      input_str.colorize(String.colors.shuffle.first)
     end
 
     def display
