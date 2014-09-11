@@ -106,7 +106,11 @@ class HangMan
         error_row = error_bank[error_number][:row]
         error_col = error_bank[error_number][:col]
         error_str = error_bank[error_number][:str]
-        @picture[error_row][error_col ] = error_str
+        @picture[error_row][error_col ] = randomly_colorize(error_str)
+    end
+
+    def randomly_colorize(error_str)
+      error_str.colorize(String.colors.shuffle.first)
     end
 
     def display
@@ -127,7 +131,7 @@ class HangMan
         h: "__|____________ ",
         j: "                ",
         k: "                "
-      }
+        }
     end
 
     def error_bank
@@ -136,48 +140,45 @@ class HangMan
           id: :head,
           row: :c,
           col: 11,
-          str: "O".red
+          str: "O"
         },
         {
           id: :arm1,
           row: :d,
           col: 12,
-          str: "-".cyan
+          str: "-"
         },
         {
           id:  :body1,
           row: :d,
           col: 11,
-          str: "|".green
+          str: "|"
         },
         {
           id: :arm2,
           row: :d,
           col: 10,
-          str: "-".magenta
+          str: "-"
         },
         {
           id: :body2,
           row: :e,
           col: 11,
-          str: "|".blue
+          str: "|"
         },
         {
           id: :leg1,
           row: :f,
           col: 12,
-          str: "\\".white
+          str: "\\"
         },
         {
           id: :leg2,
           row: :f,
           col: 10,
-          str: "/".yellow
+          str: "/"
         },
-
-
       ]
-
     end
   end
 end
