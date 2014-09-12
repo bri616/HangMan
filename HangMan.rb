@@ -8,6 +8,7 @@ class HangMan
     @correct_letters = []
     @secret_word = choose_random_word
     @screen = Screen.new()
+    @alphabet = ("a".."z").to_a+["-"]
   end
 
   def choose_random_word
@@ -32,9 +33,8 @@ class HangMan
     end
   end
 
-
   def in_alphabet?(letter)
-    ("a".."z").to_a.include? letter
+    @alphabet.include? letter
   end
 
   def check_word_for_letter(new_letter)
@@ -65,9 +65,8 @@ class HangMan
   end
 
   def incorrect_letters_formatted
-    alphabet = ("a".."z").to_a
-    format_string = " "*alphabet.length
-    format_letters_for_display(incorrect_letters, alphabet,format_string).red
+    format_string = " "*@alphabet.length
+    format_letters_for_display(incorrect_letters, @alphabet,format_string).red
   end
 
   def correct_letters_formatted
