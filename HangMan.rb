@@ -11,11 +11,11 @@ class HangMan
   end
 
   def choose_random_word
-    word_array.sample
+    word_array.sample.chomp
   end
 
   def word_array
-    ["chinook", "cascade", "columbus", "horizon", "citra", "mosaic"]
+    File.readlines("/usr/share/dict/words")
   end
 
   def check_guess(letter)
@@ -24,7 +24,7 @@ class HangMan
 
   def update_scrn_msg(letter)
     if !in_alphabet? letter
-      @screen_message = "Not allowed!".magenta
+      @screen_message = "Not allowed!".cyan
     elsif @letters_tried.include? letter
       @screen_message = "Already tried it!".magenta
     else
@@ -73,7 +73,7 @@ class HangMan
   def correct_letters_formatted
     theword = @secret_word.chars
     format_string = "_ "*theword.length
-    format_letters_for_display(correct_letters, theword, format_string, 1).green
+    format_letters_for_display(@correct_letters, theword, format_string, 1).green
   end
 
   def format_letters_for_display(input_letters, poss_letters, format_string, space_val=0)
@@ -96,10 +96,11 @@ class HangMan
 
   def over?
     if @correct_letters.to_set == @secret_word.chars.to_set
-      self.exit_message = "You won!"
+      @exit_message = "You won!"
       true
     elsif @incorrect_letters.length == @screen.error_bank.length
-      self.exit_message = "You lost! :("
+      @correct_letters = @secret_word.chars
+      @exit_message = "You lost! :("
       true
     end
   end
