@@ -11,7 +11,7 @@ class HangMan
   end
 
   def choose_random_word
-    word_array.sample.chomp
+    word_array.sample.chomp.downcase
   end
 
   def word_array
