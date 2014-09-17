@@ -24,13 +24,13 @@ class HangMan
   end
 
   def update_scrn_msg(letter)
-    if !in_alphabet? letter
-      @screen_message = "Not allowed!".cyan
-    elsif @letters_tried.include? letter
-      @screen_message = "Already tried it!".magenta
-    else
-      @screen_message = ""
-    end
+    @screen_message = if !in_alphabet? letter
+                        "Not allowed!".cyan
+                      elsif @letters_tried.include? letter
+                        "Already tried it!".magenta
+                      else
+                        ""
+                      end
   end
 
   def in_alphabet?(letter)
@@ -116,7 +116,7 @@ class Screen
       error_row = error_bank[error_number][:row]
       error_col = error_bank[error_number][:col]
       error_str = error_bank[error_number][:str]
-      @picture[error_row][error_col ] = randomly_colorize(error_str)
+      @picture[error_row][error_col] = randomly_colorize(error_str)
   end
 
   def randomly_colorize(input_str)
